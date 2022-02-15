@@ -45,6 +45,17 @@ public class UserRepository {
         return user;
     }
 
+    public void updateUser(User user) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement("UPDATE user SET name = ?, surname = ? WHERE id = ?");
+        preparedStatement.setString(1, "Updated Name");
+        preparedStatement.setString(2, "Updated Surname");
+        preparedStatement.setInt(3, 5);
+
+        preparedStatement.executeUpdate();
+        preparedStatement.close();
+    }
+
     public void deleteUser(User user) throws SQLException {
         Connection connection = dataSource.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM user WHERE id = ?");
