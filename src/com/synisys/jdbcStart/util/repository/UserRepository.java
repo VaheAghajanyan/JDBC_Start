@@ -77,4 +77,28 @@ public class UserRepository {
 
         return user;
     }
+
+    // TRANSACTION ISOLATION LAYERS
+
+    public void transfer(User from, User to, int amount) throws SQLException {
+        Connection connection = dataSource.getConnection();
+        connection.setAutoCommit(false);
+        connection.setReadOnly(true);
+        connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE student SET balance = ? WHERE id = ?");
+            preparedStatement.setInt(1, from.getBalance() - amount);
+            preparedStatement.setInt(1, from.getId());
+            preparedStatement.executeUpdate();
+
+            connection.prepareStatement("UPDATE user SET balance = ? WHERE id = ?");
+            preparedStatement.setInt(1, to.getBalance() + amount);
+            preparedStatement.setInt(2, to.getId());
+
+            connection.commit();
+        } catch (Throwable throwable) {
+            connection.rollback();
+        }
+    }
 }

@@ -8,6 +8,7 @@ public class User {
     private String password;
     private String code;
     private int status;
+    private int balance;
 
     public User(String name, String surname, String email, String password, String code, int status){
         this.name = name;
@@ -74,6 +75,14 @@ public class User {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public int getBalance(){
+        return this.balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
     }
 
     @Override
